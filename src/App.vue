@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView } from 'vue-router';
+import NavBar from './components/NavBar.vue';
 </script>
 
 <template>
-  <header>
-    <div>header placeholder</div>
-  </header>
-
-  <RouterView />
+  <div class="w-full h-screen bg-black p-8 flex flex-col">
+    <NavBar />
+    <div class="h-full">
+      <RouterView />
+    </div>
+  </div>
 </template>
