@@ -22,13 +22,13 @@
             </div>
           </div>
         </div>
-        <div class="text-white relative mt-4">{{ movie?.summary }}</div>
+        <div class="text-white relative mt-4" v-html="movie?.summary"></div>
       </div>
     </div>
 
     <div class="text-white z-50 mt-8" v-if="seasons">
       <div class="my-4">
-        <select class="mb-4 bg-gray-700 rounded-md p-2">
+        <select class="mb-4 bg-gray-700 rounded-md p-2" v-model="selectedSeason">
           <option
             class="bg-gray-700 p-2"
             v-for="(episodes, season) in seasons"
