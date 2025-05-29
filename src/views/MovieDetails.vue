@@ -1,13 +1,12 @@
 <template>
   <div class="h-full flex flex-col justify-around">
-    <div class="absolute w-full h-full flex right-0 top-0">
-      <div class="flex-1"></div>
-      <img class="flex right-0 top-0" :src="movie?.image.original" alt="" />
+    <div class="absolute w-full h-full flex right-0 top-0 overflow-hidden">
+      <img class="absolute right-0 top-0 min-w-min" :src="movie?.image.original" alt="" />
       <div
-        class="absolute z-30 h-[600px] left-[120px] w-[77%] right-0 top-0 bg-gradient-to-r from-black via-black"
+        class="absolute z-30 h-full left-0 xl:left-60 xl:w-[77%] right-0 top-0 bg-gradient-to-r from-black via-black"
       />
       <div
-        class="absolute z-30 h-[70%] w-full right-0 bottom-0 bg-gradient-to-t from-black via-black"
+        class="absolute z-30 h-[45%] w-full right-0 bottom-0 bg-gradient-to-t from-black via-black"
       />
     </div>
     <div v-if="movie" class="w-full z-50">
@@ -47,7 +46,8 @@
             <span class="absolute p-1 m-1 right-0 top-0 text-white bg-black opacity-75">{{
               `${episode.number} : ${episode.name}`
             }}</span>
-            <img :src="episode.image.medium" :alt="episode.name" />
+            <img v-if="episode.image" :src="episode.image?.medium" :alt="episode.name" />
+            <img v-else src="../assets/no_cover.svg" :alt="episode.name" />
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ import NavBar from './components/NavBar.vue';
 
 <template>
   <div class="w-full h-screen bg-black p-8 flex flex-col">
-    <NavBar />
+    <!-- <NavBar /> -->
     <div class="h-full">
       <RouterView />
     </div>
