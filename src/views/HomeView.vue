@@ -1,7 +1,7 @@
 <template>
-  <main class="">
+  <main class="h-full">
     <section v-if="selectedMovie" class="h-[70%]">
-      <MovieDescription :movie="selectedMovie"></MovieDescription>
+      <MovieDescription :movie="selectedMovie" :height="600"></MovieDescription>
     </section>
     <section>
       <div class="text-white z-50 mt-8" v-if="genres">

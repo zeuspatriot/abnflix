@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-full justify-around flex flex-col content-around">
-    <section v-if="movie">
+  <div class="min-h-full">
+    <section v-if="movie" class="h-[70%]">
       <MovieDescription :movie></MovieDescription>
     </section>
-
+    <div></div>
     <section>
-      <div class="text-white z-50 mt-8" v-if="seasons">
+      <div class="text-white z-50 mt-8 h-[30%]" v-if="seasons">
         <div class="my-4">
           <select class="mb-4 bg-gray-700 rounded-md p-2" v-model="selectedSeason">
             <option
@@ -76,9 +76,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style>
-body {
-  -webkit-overflow-scrolling: touch;
-}
-</style>

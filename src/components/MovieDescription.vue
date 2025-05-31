@@ -1,5 +1,5 @@
 <template>
-  <div v-if="movie" class="w-full z-50 flex flex-row justify-between h-[600px]">
+  <div v-if="movie" :class="`w-full z-50 flex flex-row justify-between h-[${height || 600}px]`">
     <div class="sm:w-[65%] w-full mt-80 sm:mt-0">
       <div class="z-40 text-white pt-20">
         <div class="text-[55px] font-semibold font-serif">{{ movie.name }}</div>
@@ -26,5 +26,5 @@
 import { defineProps } from 'vue';
 import type { Movie } from '../types/movie';
 
-const { movie } = defineProps<{ movie: Movie }>();
+const { movie } = defineProps<{ movie: Movie; height?: number }>();
 </script>
