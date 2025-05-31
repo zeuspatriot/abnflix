@@ -1,57 +1,41 @@
 <template>
-  <div class="h-full flex flex-col justify-around">
-    <div class="absolute w-full h-full flex right-0 top-0 overflow-hidden">
-      <img class="absolute right-0 top-0 min-w-min" :src="movie?.image.original" alt="" />
-      <div
-        class="absolute z-30 h-full left-0 xl:left-60 xl:w-[77%] right-0 top-0 bg-gradient-to-r from-black via-black"
-      />
-      <div
-        class="absolute z-30 h-[45%] w-full right-0 bottom-0 bg-gradient-to-t from-black via-black"
-      />
-    </div>
-    <div v-if="movie" class="w-full z-50">
-      <div class="left-0 top-0 w-[50%]">
-        <div class="z-40 text-white pt-20">
-          <div class="text-[55px] font-semibold font-serif">{{ movie.name }}</div>
-          <div class="flex items-center text-lg pt-4">
-            <div>{{ new Date(movie.premiered).getUTCFullYear() }}</div>
-            <div v-for="genre in movie.genres" :key="genre" class="relative">
-              <span class="absolute left-[4px] -top-[28px] text-[40px]">.</span>
-              <span class="pl-4">{{ genre }}</span>
+  <div class="min-h-full justify-around flex flex-col content-around">
+    <section v-if="movie">
+      <MovieDescription :movie></MovieDescription>
+    </section>
+
+    <section>
+      <div class="text-white z-50 mt-8" v-if="seasons">
+        <div class="my-4">
+          <select class="mb-4 bg-gray-700 rounded-md p-2" v-model="selectedSeason">
+            <option
+              class="bg-gray-700 p-2"
+              v-for="(episodes, season) in seasons"
+              :key="season"
+              :value="season"
+            >
+              Season {{ season }}
+            </option>
+          </select>
+          <div
+            class="flex gap-4 flex-row overflow-x-hidden scroll-smooth snap-x"
+            v-horizontalScroll
+          >
+            <div
+              class="min-w-[250px] h-[140px] relative snap-start"
+              v-for="episode in seasons[selectedSeason]"
+              :key="episode.id"
+            >
+              <span class="absolute p-1 m-1 right-0 top-0 text-white bg-black opacity-75">{{
+                `${episode.number} : ${episode.name}`
+              }}</span>
+              <img v-if="episode.image" :src="episode.image?.medium" :alt="episode.name" />
+              <img v-else src="../assets/no_cover.svg" :alt="episode.name" />
             </div>
           </div>
         </div>
-        <div class="text-white relative mt-4" v-html="movie?.summary"></div>
       </div>
-    </div>
-
-    <div class="text-white z-50 mt-8" v-if="seasons">
-      <div class="my-4">
-        <select class="mb-4 bg-gray-700 rounded-md p-2" v-model="selectedSeason">
-          <option
-            class="bg-gray-700 p-2"
-            v-for="(episodes, season) in seasons"
-            :key="season"
-            :value="season"
-          >
-            Season {{ season }}
-          </option>
-        </select>
-        <div class="flex gap-4 flex-row overflow-x-hidden scroll-smooth snap-x" v-horizontalScroll>
-          <div
-            class="min-w-[250px] h-[140px] relative snap-start"
-            v-for="episode in seasons[selectedSeason]"
-            :key="episode.id"
-          >
-            <span class="absolute p-1 m-1 right-0 top-0 text-white bg-black opacity-75">{{
-              `${episode.number} : ${episode.name}`
-            }}</span>
-            <img v-if="episode.image" :src="episode.image?.medium" :alt="episode.name" />
-            <img v-else src="../assets/no_cover.svg" :alt="episode.name" />
-          </div>
-        </div>
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -61,6 +45,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import type { Movie } from '@/types/movie';
 import type { Episode } from '@/types/episode';
+import MovieDescription from '@/components/MovieDescription.vue';
 
 const route = useRoute();
 

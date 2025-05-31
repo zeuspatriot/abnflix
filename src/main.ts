@@ -18,10 +18,10 @@ app.directive('horizontalScroll', {
         touchPrev = currentTouch;
       }
       if (touchPrev > currentTouch) {
-        el.scrollLeft = el.scrollLeft - 750;
+        el.scrollLeft = el.scrollLeft + 500;
         touchPrev = currentTouch;
       } else {
-        el.scrollLeft = el.scrollLeft + 750;
+        el.scrollLeft = el.scrollLeft - 500;
         touchPrev = currentTouch;
       }
     });
