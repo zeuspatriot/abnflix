@@ -1,18 +1,19 @@
 <template>
   <main class="h-full mt-16">
-    <div class="flex flex row gap-8 flex-wrap">
+    <div class="flex row gap-8 flex-wrap">
       <div
         class="min-w-[210px] h-[340px] relative snap-start flex items-center"
-        v-for="movie in shows"
-        :key="movie.show.id"
-        @mouseenter="setSelectedMovie(movie.show)"
+        :data-testid="`show${selectedMovie?.id === show.id ? ' selected' : ''}`"
+        v-for="show in shows"
+        :key="show.id"
+        @mouseenter="setSelectedMovie(show)"
       >
         <RouterLink
-          :to="`/movie/${movie.show.id}`"
-          :class="`${movie.show.id === selectedMovie?.id ? 'scale-110 transition' : ''} h-[295px]`"
+          :to="`/movie/${show.id}`"
+          :class="`${show.id === selectedMovie?.id ? 'scale-110 transition' : ''} h-[295px]`"
         >
-          <img v-if="movie.show.image" :src="movie.show.image?.medium" :alt="movie.show.name" />
-          <img v-else src="../assets/no_cover_vertical.svg" :alt="movie.show.name" />
+          <img v-if="show.image" :src="show.image.medium" :alt="show.name" />
+          <img v-else src="../assets/no_cover_vertical.svg" :alt="show.name" />
         </RouterLink>
       </div>
     </div>
@@ -26,7 +27,7 @@ import { onMounted, onUpdated, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const shows = ref<{ score: number; show: Movie }[]>([]);
+const shows = ref<Movie[]>([]);
 const lastQuery = ref(route.params.query);
 const selectedMovie = ref<Movie>();
 
@@ -38,8 +39,8 @@ const search = async () => {
     const response = await axios.get<{ score: number; show: Movie }[]>(
       `https://api.tvmaze.com/search/shows?q=${route.params.query}`,
     );
-    shows.value = response.data;
-    selectedMovie.value = shows.value[0]?.show;
+    shows.value = response.data.map((result) => result.show);
+    selectedMovie.value = shows.value[0];
   } catch (error) {
     console.error('Error fetching routes', error);
   }
