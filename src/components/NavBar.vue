@@ -11,16 +11,14 @@
     <div class="flex flex-row h-[120px]">
       <div :class="`py-2 mx-10 my-6 flex`">
         <input
-          class="w-60 rounded-md p-2 border-2 border-white bg-gray-500"
-          src="../assets/searchicon.png"
+          id="searchBar"
+          :class="`${searchActive || isSearchView ? 'w-60 border-1' : 'w-0'} text-white rounded-md pl-12 border-white`"
           type="text"
-          v-model="search"
-        />
-        <Magnify
-          @click="toggleSearchActive"
-          fillColor="#FFFFFF"
-          :size="40"
-          class="cursor-pointer"
+          placeholder="Search for show..."
+          v-model="searchInput"
+          @focus="setSearchActive(true)"
+          @blur="setSearchActive(false)"
+          @keyup="search"
         />
       </div>
       <RouterLink to="/" class="py-2 mx-10 my-6" exact-active-class="border-b-4 border-b-red-500">
@@ -31,28 +29,46 @@
 </template>
 
 <script setup lang="ts">
-import Magnify from 'vue-material-design-icons/Magnify.vue';
 import HomeOutline from 'vue-material-design-icons/HomeOutline.vue';
 import debounce from 'lodash.debounce';
-import { RouterLink, Router } from 'vue-router';
-import { ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
+import { ref } from 'vue';
 import router from '@/router';
 
+const route = useRoute();
 const searchActive = ref(false);
-const search = ref('');
+const searchInput = ref('');
+const isSearchView = ref(route.name === 'search');
 
-watch(
-  search,
-  debounce(() => {
-    if (!search.value.trim()) {
-      router.push(`/`);
-    } else {
-      router.push(`/search/${search.value}`);
-    }
-  }, 500),
-);
+const search = debounce(() => {
+  if (!searchInput.value.trim()) {
+    router.push(`/`);
+  } else {
+    router.push(`/search/${searchInput.value}`);
+  }
+}, 500);
 
-const toggleSearchActive = () => {
-  searchActive.value = !searchActive.value;
+const setSearchActive = (bool: boolean) => {
+  console.log(route.name);
+  searchActive.value = bool;
 };
+
+router.afterEach(() => {
+  console.log('router after each', route.name);
+  if (route.name === 'search') {
+    isSearchView.value = true;
+  } else {
+    searchInput.value = '';
+    isSearchView.value = false;
+  }
+});
 </script>
+
+<style scoped>
+input#searchBar {
+  background-image: url('../assets/searchicon.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: width 0.4s ease-in-out;
+}
+</style>

@@ -57,6 +57,11 @@ onMounted(async () => {
   try {
     const moviesResp = await axios.get(`https://api.tvmaze.com/shows/${route.params.id}`);
     movie.value = moviesResp.data;
+  } catch (error) {
+    console.error('Error fetching movie.', error);
+  }
+
+  try {
     const episodesResp = await axios.get<Episode[]>(
       `https://api.tvmaze.com/shows/${route.params.id}/episodes`,
     );
@@ -72,7 +77,7 @@ onMounted(async () => {
       {} as { [key: string]: Episode[] },
     );
   } catch (error) {
-    console.error('Error fetching movie.', error);
+    console.error('Error fetching episodes', error);
   }
 });
 </script>
