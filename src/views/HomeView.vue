@@ -62,30 +62,24 @@ onMounted(async () => {
   try {
     const response = await axios.get<Movie[]>('https://api.tvmaze.com/shows');
     selectedMovie.value = response.data[0];
-    genres.value = Object.entries(
-      response.data.reduce(
-        (accum, currentMovie) => {
-          const genre = currentMovie.genres[0] || 'Uncategorised';
-          if (!accum[genre]) {
-            accum[genre] = [currentMovie];
-          }
-          accum[genre].push(currentMovie);
 
-          return accum;
-        },
-        {} as { [key: string]: Movie[] },
-      ),
-    ).reduce(
-      (accum, [genre, movies]) => {
-        accum[genre] = movies
-          .sort((a, b) => {
-            return b.rating.average - a.rating.average;
-          })
-          .filter((item, index, self) => index === self.findIndex((t) => t.id === item.id));
-        return accum;
-      },
-      {} as { [key: string]: Movie[] },
-    );
+    const genreMap: { [key: string]: Movie[] } = {};
+    for (const movie of response.data) {
+      const genre = movie.genres[0] || 'Uncategorised';
+      if (!genreMap[genre]) {
+        genreMap[genre] = [];
+      }
+
+      if (!genreMap[genre].some((m) => m.id === movie.id)) {
+        genreMap[genre].push(movie);
+      }
+    }
+
+    Object.keys(genreMap).forEach((genre) => {
+      genreMap[genre].sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
+    });
+
+    genres.value = genreMap;
   } catch (error) {
     console.error('Error fetching movies', error);
   }

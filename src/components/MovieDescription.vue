@@ -1,6 +1,9 @@
 <template>
-  <div v-if="movie" class="w-full z-50 flex flex-row justify-between h-[660px] gap-6">
-    <div class="sm:w-[65%] w-full mt-80 sm:mt-0">
+  <div
+    v-if="movie"
+    class="w-full z-50 flex flex-col-reverse sm:flex-row justify-between h-full items-center sm:h-[660px] gap-6"
+  >
+    <div class="sm:w-[65%] w-full">
       <div class="z-40 text-white pt-20">
         <div class="text-[55px] font-semibold font-serif">{{ movie.name }}</div>
         <div class="flex items-center text-lg pt-4">
@@ -17,13 +20,13 @@
       v-if="movie.image?.original"
       :src="movie.image.original"
       alt=""
-      class="right-8 top-8 min-w-max max-w-[50%] max-h-[600px]"
+      class="min-w-max max-w-[50%] max-h-[600px]"
     />
     <img
       v-else
       src="../assets/no_cover_vertical.svg"
       alt=""
-      class="right-8 top-8 min-w-max max-w-[50%] max-h-[600px]"
+      class="min-w-max max-w-[50%] max-h-[600px]"
     />
   </div>
 </template>

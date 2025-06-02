@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-full">
-    <section v-if="movie" class="h-[70%]">
+  <div class="min-h-screen flex flex-col">
+    <section v-if="movie">
       <MovieDescription :movie></MovieDescription>
     </section>
     <div></div>
