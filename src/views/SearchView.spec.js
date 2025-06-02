@@ -4,11 +4,15 @@ import SearchView from './SearchView.vue';
 import axios from 'axios';
 
 vi.mock('axios');
-vi.mock('vue-router', () => ({
-  useRoute: () => ({
-    params: { query: 'Show' },
-  }),
-}));
+vi.mock('vue-router', () => {
+  const actual = vi.importActual('vue-router');
+  return {
+    ...actual,
+    useRoute: () => ({
+      params: { query: 'Show' },
+    }),
+  };
+});
 const mockShows = [
   {
     score: 1,
@@ -35,9 +39,16 @@ describe('SearchView.vue', () => {
 
   it('shows and selectedMovie are set after successfull search', async () => {
     const spy = vi.spyOn(axios, 'get');
-    const wrapper = mount(SearchView);
+    const wrapper = mount(SearchView, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
 
-    console.log('geting the search value:', wrapper.vm.shows.value);
     expect(spy).toHaveBeenCalledWith('https://api.tvmaze.com/search/shows?q=Show');
     await flushPromises();
 
@@ -46,7 +57,15 @@ describe('SearchView.vue', () => {
   });
 
   it('updates selectedMovie when a show is hovered over', async () => {
-    const wrapper = mount(SearchView);
+    const wrapper = mount(SearchView, {
+      global: {
+        stubs: {
+          RouterLink: {
+            template: '<a><slot /></a>',
+          },
+        },
+      },
+    });
     await flushPromises();
 
     const showElements = wrapper.findAll('[data-testid~=show]');

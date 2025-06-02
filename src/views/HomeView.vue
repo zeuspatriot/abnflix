@@ -8,6 +8,7 @@
         <div
           class="my-8 max-w-max"
           data-testid="genre"
+          :data-genre="genre"
           v-for="(movies, genre) in genres"
           :key="genre"
         >
@@ -27,6 +28,11 @@
                 :to="`/movie/${movie.id}`"
                 :class="`${movie.id === selectedMovie?.id ? 'scale-110 transition' : ''} h-[295px]`"
               >
+                <span
+                  class="absolute p-1 m-1 right-0 top-0 text-white bg-black opacity-75"
+                  v-if="movie.rating?.average"
+                  >Rating: {{ movie.rating.average }}</span
+                >
                 <img v-if="movie.image" :src="movie.image?.medium" :alt="movie.name" />
                 <img v-else src="../assets/no_cover_vertical.svg" :alt="movie.name" />
               </RouterLink>
@@ -45,7 +51,7 @@ import axios from 'axios';
 import type { Movie } from '@/types/movie';
 import MovieDescription from '@/components/MovieDescription.vue';
 
-const genres = ref<{ [key: string]: { [key: string]: Movie } }>({});
+const genres = ref<{ [key: string]: Movie[] }>({});
 const selectedMovie = ref<Movie>();
 
 const setSelectedMovie = (movie: Movie) => {
@@ -56,17 +62,29 @@ onMounted(async () => {
   try {
     const response = await axios.get<Movie[]>('https://api.tvmaze.com/shows');
     selectedMovie.value = response.data[0];
-    genres.value = response.data.reduce(
-      (accum, currentMovie) => {
-        const genre = currentMovie.genres[0] || 'Uncategorised';
-        if (!accum[genre]) {
-          accum[genre] = { [currentMovie.name]: currentMovie };
-        }
-        accum[genre][currentMovie.name] = currentMovie;
+    genres.value = Object.entries(
+      response.data.reduce(
+        (accum, currentMovie) => {
+          const genre = currentMovie.genres[0] || 'Uncategorised';
+          if (!accum[genre]) {
+            accum[genre] = [currentMovie];
+          }
+          accum[genre].push(currentMovie);
 
+          return accum;
+        },
+        {} as { [key: string]: Movie[] },
+      ),
+    ).reduce(
+      (accum, [genre, movies]) => {
+        accum[genre] = movies
+          .sort((a, b) => {
+            return b.rating.average - a.rating.average;
+          })
+          .filter((item, index, self) => index === self.findIndex((t) => t.id === item.id));
         return accum;
       },
-      {} as { [key: string]: { [key: string]: Movie } },
+      {} as { [key: string]: Movie[] },
     );
   } catch (error) {
     console.error('Error fetching movies', error);

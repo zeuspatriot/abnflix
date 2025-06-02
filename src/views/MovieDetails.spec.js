@@ -38,7 +38,7 @@ describe('MovieDetailsView', () => {
     const wrapper = mount(MovieDetailsView, {
       global: {
         directives: {
-          horizontalScrol: () => {},
+          horizontalScroll: () => {},
         },
         mocks: {
           $route: { params: { id: 1 } },
@@ -59,7 +59,7 @@ describe('MovieDetailsView', () => {
     const wrapper = mount(MovieDetailsView, {
       global: {
         directives: {
-          horizontalScrol: () => {},
+          horizontalScroll: () => {},
         },
         mocks: {
           $route: { params: { id: 1 } },

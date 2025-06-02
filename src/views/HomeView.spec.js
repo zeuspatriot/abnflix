@@ -10,6 +10,7 @@ vi.mock('axios');
 const mockMovies = [
   {
     id: 1,
+    rating: { average: 8.5 },
     name: 'Movie 1',
     genres: ['Action'],
     summary: 'Summary 1',
@@ -17,6 +18,7 @@ const mockMovies = [
   },
   {
     id: 2,
+    rating: { average: 7.0 },
     name: 'Movie 2',
     genres: ['Drama'],
     summary: 'Summary 2',
@@ -41,9 +43,11 @@ describe('HomeView', () => {
     await flushPromises();
 
     expect(wrapper.findAll('[data-testid="genre"]').length).toBe(2);
-    expect(wrapper.findAll('[data-testid="genre"]').map((el) => el.text())).toEqual(
-      mockMovies.map((movie) => movie.genres[0]),
-    );
+    expect(
+      wrapper.findAll('[data-testid="genre"]').map((el) => {
+        return el.attributes()['data-genre'];
+      }),
+    ).toEqual(['Action', 'Drama']);
   });
 
   it('updates selectedMovie when a show is hovered over', async () => {
