@@ -1,4 +1,4 @@
-export interface Movie {
+export interface Show {
   id: number;
   url: string;
   name: string;

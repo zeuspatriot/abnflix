@@ -1,7 +1,7 @@
 <template>
   <main class="h-full">
-    <section v-if="selectedMovie" class="h-[70%]">
-      <MovieDescription :movie="selectedMovie" :height="600"></MovieDescription>
+    <section v-if="selectedShow" class="h-[70%]">
+      <MovieDescription :show="selectedShow" :height="600"></MovieDescription>
     </section>
     <section>
       <div class="text-white z-50 mt-8" v-if="genres">
@@ -21,12 +21,12 @@
               class="min-w-[210px] h-[340px] relative snap-start flex items-center"
               v-for="movie in movies"
               :key="movie.id"
-              :data-testid="`movie${selectedMovie?.id === movie.id ? ' selected' : ''}`"
-              @mouseenter="setSelectedMovie(movie)"
+              :data-testid="`movie${selectedShow?.id === movie.id ? ' selected' : ''}`"
+              @mouseenter="setSelectedShow(movie)"
             >
               <RouterLink
                 :to="`/movie/${movie.id}`"
-                :class="`${movie.id === selectedMovie?.id ? 'scale-110 transition' : ''} h-[295px]`"
+                :class="`${movie.id === selectedShow?.id ? 'scale-110 transition' : ''} h-[295px]`"
               >
                 <span
                   class="absolute p-1 m-1 right-0 top-0 text-white bg-black opacity-75"
@@ -48,30 +48,30 @@
 import { onMounted, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import axios from 'axios';
-import type { Movie } from '@/types/movie';
+import type { Show } from '@/types/movie';
 import MovieDescription from '@/components/MovieDescription.vue';
 
-const genres = ref<{ [key: string]: Movie[] }>({});
-const selectedMovie = ref<Movie>();
+const genres = ref<{ [key: string]: Show[] }>({});
+const selectedShow = ref<Show>();
 
-const setSelectedMovie = (movie: Movie) => {
-  selectedMovie.value = movie;
+const setSelectedShow = (movie: Show) => {
+  selectedShow.value = movie;
 };
 
 onMounted(async () => {
   try {
-    const response = await axios.get<Movie[]>('https://api.tvmaze.com/shows');
-    selectedMovie.value = response.data[0];
+    const response = await axios.get<Show[]>('https://api.tvmaze.com/shows');
+    selectedShow.value = response.data[0];
 
-    const genreMap: { [key: string]: Movie[] } = {};
-    for (const movie of response.data) {
-      const genre = movie.genres[0] || 'Uncategorised';
+    const genreMap: { [key: string]: Show[] } = {};
+    for (const show of response.data) {
+      const genre = show.genres[0] || 'Uncategorised';
       if (!genreMap[genre]) {
         genreMap[genre] = [];
       }
 
-      if (!genreMap[genre].some((m) => m.id === movie.id)) {
-        genreMap[genre].push(movie);
+      if (!genreMap[genre].some((m) => m.id === show.id)) {
+        genreMap[genre].push(show);
       }
     }
 
@@ -81,7 +81,7 @@ onMounted(async () => {
 
     genres.value = genreMap;
   } catch (error) {
-    console.error('Error fetching movies', error);
+    console.error('Error fetching shows', error);
   }
 });
 </script>

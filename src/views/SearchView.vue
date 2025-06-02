@@ -21,22 +21,22 @@
 </template>
 
 <script lang="ts" setup>
-import type { Movie } from '@/types/movie';
+import type { Show } from '@/types/movie';
 import axios from 'axios';
 import { onMounted, onUpdated, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const shows = ref<Movie[]>([]);
+const shows = ref<Show[]>([]);
 const lastQuery = ref(route.params.query);
-const selectedMovie = ref<Movie>();
+const selectedMovie = ref<Show>();
 
-const setSelectedMovie = (movie: Movie) => {
+const setSelectedMovie = (movie: Show) => {
   selectedMovie.value = movie;
 };
 const search = async () => {
   try {
-    const response = await axios.get<{ score: number; show: Movie }[]>(
+    const response = await axios.get<{ score: number; show: Show }[]>(
       `https://api.tvmaze.com/search/shows?q=${route.params.query}`,
     );
     shows.value = response.data.map((result) => result.show);

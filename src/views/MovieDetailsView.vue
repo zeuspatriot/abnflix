@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col">
-    <section v-if="movie">
-      <MovieDescription :movie></MovieDescription>
+    <section v-if="show">
+      <MovieDescription :show></MovieDescription>
     </section>
     <div></div>
     <section>
@@ -48,20 +48,20 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
-import type { Movie } from '@/types/movie';
+import type { Show } from '@/types/movie';
 import type { Episode } from '@/types/episode';
 import MovieDescription from '@/components/MovieDescription.vue';
 
 const route = useRoute();
 
-const movie = ref<Movie>();
+const show = ref<Show>();
 const seasons = ref<{ [key: string]: Episode[] }>({});
 const selectedSeason = ref<number>(1);
 
 onMounted(async () => {
   try {
-    const moviesResp = await axios.get(`https://api.tvmaze.com/shows/${route.params.id}`);
-    movie.value = moviesResp.data;
+    const showsResp = await axios.get(`https://api.tvmaze.com/shows/${route.params.id}`);
+    show.value = showsResp.data;
   } catch (error) {
     console.error('Error fetching movie.', error);
   }
