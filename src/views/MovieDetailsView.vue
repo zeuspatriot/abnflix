@@ -7,7 +7,11 @@
     <section>
       <div class="text-white z-50 mt-8 h-[30%]" v-if="seasons">
         <div class="my-4">
-          <select class="mb-4 bg-gray-700 rounded-md p-2" v-model="selectedSeason">
+          <select
+            class="mb-4 bg-gray-700 rounded-md p-2"
+            data-testid="seasonSelect"
+            v-model="selectedSeason"
+          >
             <option
               class="bg-gray-700 p-2"
               v-for="(episodes, season) in seasons"
@@ -23,6 +27,7 @@
           >
             <div
               class="min-w-[250px] h-[140px] relative snap-start"
+              data-testid="episode"
               v-for="episode in seasons[selectedSeason]"
               :key="episode.id"
             >

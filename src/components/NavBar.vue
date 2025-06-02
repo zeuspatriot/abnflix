@@ -49,12 +49,10 @@ const search = debounce(() => {
 }, 500);
 
 const setSearchActive = (bool: boolean) => {
-  console.log(route.name);
   searchActive.value = bool;
 };
 
 router.afterEach(() => {
-  console.log('router after each', route.name);
   if (route.name === 'search') {
     isSearchView.value = true;
   } else {

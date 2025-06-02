@@ -5,7 +5,12 @@
     </section>
     <section>
       <div class="text-white z-50 mt-8" v-if="genres">
-        <div class="my-8 max-w-max" v-for="(movies, genre) in genres" :key="genre">
+        <div
+          class="my-8 max-w-max"
+          data-testid="genre"
+          v-for="(movies, genre) in genres"
+          :key="genre"
+        >
           <h1>{{ genre }}</h1>
           <div
             class="flex gap-12 flex-row overflow-x-hidden scroll-smooth snap-x"
@@ -15,6 +20,7 @@
               class="min-w-[210px] h-[340px] relative snap-start flex items-center"
               v-for="movie in movies"
               :key="movie.id"
+              :data-testid="`movie${selectedMovie?.id === movie.id ? ' selected' : ''}`"
               @mouseenter="setSelectedMovie(movie)"
             >
               <RouterLink

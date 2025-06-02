@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import SearchView from './SearchView.vue';
 import axios from 'axios';
-import { nextTick } from 'vue';
 
 vi.mock('axios');
 vi.mock('vue-router', () => ({
@@ -54,8 +53,7 @@ describe('SearchView.vue', () => {
     expect(showElements.length).toBe(2);
 
     await showElements[1].trigger('mouseenter');
-    await nextTick();
 
-    expect(showElements[1].html()).toContain('src="/src/assets/no_cover_vertical.svg"');
+    expect(showElements[1].html()).toContain('data-testid="show selected"');
   });
 });
