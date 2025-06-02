@@ -8,12 +8,12 @@ This template should help get you started developing with Vue 3 in Vite.
 
 ## Tools and strategy
 
--- create vue for boilerplate
--- Tailwind for quick styling
--- vitest for testing
--- axios for http communication
--- vue-material-design-icons
--- lodash/debounce
+-- create vue for boilerplate  
+-- Tailwind for quick styling  
+-- vitest for testing  
+-- axios for http communication  
+-- vue-material-design-icons  
+-- lodash/debounce  
 
 Trying to avoid using too many external libraries and plugins, some solutions were self-implemented. `horizontalScroll` directive is one of the examples, mainly to showcase custom directives usage. Is it the best carusel implementation? No! Is it get the job done? To an extent. Small issue with scroll capturing on desktop devices (could be mitigated with turning event passive, and implementing toast message to hold down shift while scrolling).
 
